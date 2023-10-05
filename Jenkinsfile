@@ -6,7 +6,7 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == 'origin/dev') {
                         sh '''
-                        docker build -t maxmcf13/myapp:latest ./flaks-app -t maxmcf13/myapp:v$BUILD_NUMBER .
+                        docker build -t maxmcf13/myapp:latest ./flask-app -t maxmcf13/myapp:v$BUILD_NUMBER ./flask-app
                         '''
                     } else {
                         sh '''
