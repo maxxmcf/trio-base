@@ -3,29 +3,51 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh '''
-                docker build -t maxmcf13/myapp:latest -t maxmcf13/myapp:v$BUILD_NUMBER ./flask-app
-                '''
+                script {
+                    if (env.GIT_BRANCH == 'origin/dev') {
+                        sh '''
+                        docker build -t maxmcf13/myapp:latest -t maxmcf13/myapp:v$BUILD_NUMBER ./flask-app
+                        '''
+                    } else {
+                        sh '''
+                        echo "Build Not required"
+                        '''
                     }
                 }
             }
         }
         stage('Push') {
             steps {
-                sh '''
-                docker push maxmcf13/myapp:latest
-                docker push maxmcf13/myapp:v$BUILD_NUMBER
-                '''
+                script {
+                    if (env.GIT_BRANCH == 'origin/dev') {
+                        sh '''
+                        docker push maxmcf13/myapp:latest
+                        docker push maxmcf13/myapp:v$BUILD_NUMBER
+                        '''
+                    } else {
+                        sh '''
+                        echo "Push Not required"
+                        '''
                     }
+                }
             }
+        }
         stage('Cleanup') {
             steps {
-                sh '''
-                docker rmi maxmcf13/myapp:latest
-                docker rmi maxmcf13/myapp:v$BUILD_NUMBER
-                '''
-                  }
+                script {
+                    if (env.GIT_BRANCH == 'origin/dev') {
+                        sh '''
+                        docker rmi maxmcf13/myapp:latest
+                        docker rmi maxmcf13/myapp:v$BUILD_NUMBER
+                        '''
+                    } else {
+                        sh '''
+                        echo "Cleanup Not required"
+                        '''
+                    }
+                }
             }
+        }
         stage('Deploy') {
             steps {
                 script {
@@ -45,3 +67,5 @@ pipeline {
                 }
             }
         }
+    }
+}
