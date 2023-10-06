@@ -8,10 +8,6 @@ pipeline {
                         sh '''
                         docker build -t maxmcf13/myapp:latest -t maxmcf13/myapp:v$BUILD_NUMBER ./flask-app
                         '''
-                    } else if (env.GIT_BRANCH == 'origin/main') {
-                        sh '''
-                        docker build -t maxmcf13/myapp:latest -t maxmcf13/myapp:v$BUILD_NUMBER ./flask-app
-                        '''
                     } else {
                         sh '''
                         echo "Build Not required"
@@ -24,11 +20,6 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'origin/dev') {
-                        sh '''
-                        docker push maxmcf13/myapp:latest
-                        docker push maxmcf13/myapp:v$BUILD_NUMBER
-                        '''
-                    } else if (env.GIT_BRANCH == 'origin/main') {
                         sh '''
                         docker push maxmcf13/myapp:latest
                         docker push maxmcf13/myapp:v$BUILD_NUMBER
