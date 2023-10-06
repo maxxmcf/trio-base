@@ -53,10 +53,12 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == 'origin/dev') {
                         sh '''
+                        kubectl apply -f ./kubernetes -n pre-prod
                         kubectl rollout restart deployment flask-deployment -n pre-prod
                         '''
                     } else if (env.GIT_BRANCH == 'origin/main') {
                         sh '''
+                        kubectl apply -f ./kubernetes -n prod
                         kubectl rollout restart deployment flask-deployment -n prod
                         '''
                     } else {
